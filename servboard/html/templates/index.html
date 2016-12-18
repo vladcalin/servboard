@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>ServBoard {{version}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Loading Bootstrap -->
+    <link href="/static/css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Loading Flat UI -->
+    <link href="/static/css/flat-ui.min.css" rel="stylesheet">
+
+    <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
+    <!--[if lt IE 9]>
+    <script src="/static/js/vendor/html5shiv.js"></script>
+    <script src="/static/js/vendor/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="container">
+    <h3>Welcome to ServBoard {{version}}!</h3>
+
+
+    <div class="col-xs-12">
+        <h4 class="demo-panel-title">Machine information</h4>
+
+        <table class="table">
+            <tr>
+                <td>Node name</td>
+                <td>{{node_name}}</td>
+            </tr>
+        </table>
+
+        <br>
+    </div>
+    <h4 class="demo-panel-title">Resource status</h4>
+    <div class="col-xs-4">
+        <h6>Cpu status</h6>
+        {% for cputime in cpu_times %}
+        <div class="progress">
+            <div class="progress-bar" style="width: {{cputime}}%;">{{cputime}}</div>
+        </div>
+        {% end %}
+        <br>
+    </div>
+
+    <div class="col-xs-4">
+        <h6>Memory status</h6>
+        <div class="progress">
+            <div class="progress-bar" style="width: {{memory_used_raw / memory_total_raw * 100}}%;">
+                {{memory_used_humanized}} out of {{memory_total_humanized}}
+            </div>
+        </div>
+        <br>
+    </div>
+
+    <div class="col-xs-4">
+        <h6>Disk status</h6>
+        {% for mountpoint, disk in disk_status.items() %}
+        {{mountpoint}}
+
+        {% if disk %}
+        <div class="progress">
+            <div class="progress-bar" style="width: {{disk.percent}}%;">
+                {{naturalsize(disk.used)}} out of {{naturalsize(disk.total)}}
+            </div>
+        </div>
+        {% else %}
+        <br>
+        <div class="label label-danger">No information available</div>
+        <br>
+        {% end %}
+        {% end %}
+        <br>
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Location</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for service, location in services.items() %}
+        <tr>
+            <td>{{service}}</td>
+            <td><a href="{{location}}" target="_blank">{{location}}</a></td>
+        </tr>
+        {% end %}
+        </tbody>
+    </table>
+
+
+</div>
+<!-- /.container -->
+
+
+<!-- jQuery (necessary for Flat UI's JavaScript plugins) -->
+<script src="/static/js/vendor/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/static/js/vendor/video.js"></script>
+<script src="/static/js/flat-ui.min.js"></script>
+
+</body>
+</html>

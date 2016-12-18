@@ -1,0 +1,3 @@
+pymicroservice>=0.0.3
+psutil
+humanize
